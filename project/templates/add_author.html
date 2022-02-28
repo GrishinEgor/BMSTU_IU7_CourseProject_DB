@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Добавление автора
+{% endblock %}
+
+{% block body %}
+<body class="text-center" cz-shortcut-listen="true">
+    <form class="container align-self-center" action={{ url_for('add_author', role=role) }} method="post">
+        <h1>Добавление нового автора</h1>
+        Имя:<br>
+        <p><input type="text" name="name" required></p>
+        Фамилия:<br>
+        <p><input type="text" name="surname" required></p>
+        Год рождения:<br>
+        <p><input type="number" name="year_birth" required></p>
+        Год смерти (если есть):<br>
+        <p><input type="number" name="year_death"></p>
+        <p><input type="submit" value="Добавить"></p>
+
+        {% for msg in get_flashed_messages() %}
+            <div class="flash">{{msg}}</div>
+        {% endfor %}
+    </form>
+</body>
+{% endblock %}

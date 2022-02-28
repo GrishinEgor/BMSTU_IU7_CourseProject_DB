@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Удаление пользователя
+{% endblock %}
+
+{% block body %}
+<body class="text-center" cz-shortcut-listen="true">
+    <form class="container align-self-center" action={{ url_for('delete_user') }} method="post">
+        <h1>Удаление пользователя</h1>
+        Логин:<br>
+        <p><input type="text" name="login" required></p>
+        <p><input type="submit" value="Удалить"></p>
+
+        {% for msg in get_flashed_messages() %}
+            <div class="flash">{{msg}} </div>
+        {% endfor %}
+    </form>
+</body>
+{% endblock %}

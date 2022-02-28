@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Авторы
+{% endblock %}
+
+{% block body %}
+<div class="container mt-5">
+    <div class="parent">
+        <h2>Авторы</h2>
+    </div>
+    {% for author in authors %}
+        <div class="row">
+            <div class="col-md">
+                <h4><a href="{{ url_for('author', id_author=author['id']) }}">{{ "{} {}".format(author['name'], author['surname']) }}</a></h4>
+                {{ "Год рождения: {}".format(author['year_birth']) }}<br>
+                {% if author['year_death'] %}
+                    {{ "Год смерти: {}".format(author['year_death']) }}<br>
+                {% endif %}
+                {{ "Количество книг автора в библиотеке: {}".format(author['count_books']) }}<br>
+            </div>
+        </div>
+        <hr>
+    {% endfor %}
+</div>
+{% endblock %}

@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Книги
+{% endblock %}
+
+{% block body %}
+<div class="container mt-5">
+    <div class="parent">
+        <h2>Книги</h2>
+    </div>
+    {% for book in books %}
+        <div class="row">
+            {% if book['path_to_cover'] %}
+                <div class="col-md-auto">
+                    <img src={{ url_for('static', filename=book['path_to_cover']) }} align=”top” width="180">
+                </div>
+            {% endif %}
+            <div class="col-md">
+                <h4><a href="{{ url_for('book_id', id_book=book['id']) }}">{{ book['name'] }}</a></h4>
+                {{ "Оценка: {}".format(book['rating']) }}<br>
+                {{ "Автор: {} {}".format(book['name_author'], book['surname_author']) }}<br>
+                {{ "Год публикации: {}".format(book['year_of_publication']) }}<br>
+            </div>
+        </div>
+        <hr>
+    {% endfor %}
+</div>
+{% endblock %}

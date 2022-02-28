@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Заявки
+{% endblock %}
+
+{% block body %}
+<div class="container mt-5">
+    <div class="parent">
+        {% if status == 'request_recieve' %}
+            <h2>Заявки на выдачу книг</h2>
+        {% else %}
+            <h2>Заявки на сдачу книг</h2>
+        {% endif %}
+    </div>
+    {% for reading in readings %}
+        <div class="row">
+            <div class="col-md">
+                {% if user_role == 'librarian' %}
+                    <h4>{{ "Заявка №{}".format(reading['id']) }}</h4>
+                    {{ "Читатель: {} {}".format(reading['reader_name'], reading['reader_surname']) }}<br>
+                    {{ "Книга: {}".format(reading['book_name']) }}<br>
+                    {{ "Количество оставшихся экземпляров: {}".format(reading['number_of_copies']) }}<br>
+                    {% if status == 'request_recieve' %}
+                        {% if reading['number_of_copies'] > 0 %}
+                            <a href="{{ url_for('approve_request', id_request=reading['id'], status=status) }}">Одобрить заявку</a>
+                        {% else %}
+                            Одобрить заявку временно не возможно, т.к. все экземпляры данной книги выданы
+                        {% endif %}
+                    {% elif status == 'request_return' %}
+                        <a href="{{ url_for('approve_request', id_request=reading['id'], status=status) }}">Одобрить заявку</a>
+                    {% endif %}
+                {% elif user_role == 'reader' %}
+                    <h4>{{ "Заявка №{}".format(reading['id']) }}</h4>
+                    Книга: <a href="{{ url_for('book_id', id_book=reading['book_id']) }}">{{ reading['book_name'] }}</a>
+                {% endif %}
+            </div>
+        </div>
+        <hr>
+    {% endfor %}
+</div>
+{% endblock %}

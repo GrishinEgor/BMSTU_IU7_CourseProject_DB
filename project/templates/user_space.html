@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Личный кабинет
+{% endblock %}
+
+{% block body %}
+    <div class="container mt-5">
+        {% if user_role == 'admin' %}
+            <h1>Личный кабинет администратора</h1>
+            <a href="{{ url_for('add_user', role='admin') }}">Зарегистрировать нового администратора</a><br>
+            <a href="{{ url_for('add_user', role='librarian') }}">Зарегистрировать нового библиотекаря</a><br>
+            <a href="{{ url_for('add_user', role='reader') }}">Зарегистрировать нового читателя</a><br>
+            <a href="{{ url_for('delete_user') }}">Удалить пользователя</a>
+        {% elif user_role == 'librarian' %}
+            <h1>Личный кабинет библиотекаря</h1>
+            <a href="{{ url_for('all_readings', status='request_recieve') }}">Заявки на выдачу книги</a><br>
+            <a href="{{ url_for('all_readings', status='request_return') }}">Заявки на сдачу книги</a><br>
+            <a href="{{ url_for('add_author') }}">Добавить нового автора</a><br>
+            <a href="{{ url_for('all_authors') }}">Добавить книгу по автору</a><br>
+        {% elif user_role == 'reader' %}
+            <h1>Личный кабинет читателя</h1>
+            <a href="{{ url_for('all_readings', status='request_recieve') }}">Мои заявки на выдачу книги</a><br>
+            <a href="{{ url_for('all_readings', status='in_reading') }}">Выданные мне книги</a><br>
+            <a href="{{ url_for('all_readings', status='request_return') }}">Мои заявки на сдачу книги</a><br>
+            <a href="{{ url_for('all_readings', status='returned') }}">Мои сданные книги</a><br>
+        {% endif %}
+    </div>
+{% endblock %}

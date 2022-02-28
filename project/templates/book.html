@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+
+{% block title %}
+{{ book['name'] }}
+{% endblock %}
+
+{% block body %}
+<div class="container mt-5">
+    <div class="parent">
+        <h1>{{ book['name'] }}</h1>
+    </div>
+
+    <div class="row">
+        {% if book['path_to_cover'] %}
+            <div class="col-md-auto">
+                <img src={{ url_for('static', filename=book['path_to_cover']) }} align=”top” width="300">
+            </div>
+        {% endif %}
+        <div class="col-md">
+            {{ "Оценка: {}".format(book['rating']) }}<br>
+            {{ "Год публикации: {}".format(book['year_of_publication']) }}<br>
+            {{ "Автор: {} {}".format(book['name_author'], book['surname_author']) }}<br>
+            {% if user_role == 'librarian' or user_role == 'admin' %}
+                {{ "Количество оставшихся экземпляров: {}".format(book['number_of_copies']) }}<br>
+            {% endif %}
+            <br>
+            {% if user_role == 'reader' %}
+                {% if status == 'request_recieve' %}
+                    Эта книга в ожидании получения
+                {% elif status == 'in_reading' %}
+                    Подать заявку на сдачу этой книги
+                    <form action={{ url_for('book_id', id_book=book['id'], action='request_return') }}>
+                        <p><input type="text" name="estimation" placeholder="Оценка"></p>
+                        <p><input type="submit" value="Подать"></p>
+                    </form>
+                {% elif status == 'request_return' %}
+                    Эта книга в ожидании сдачи
+                {% elif status == 'returned' %}
+                    <a href="{{ url_for('book_id', id_book=book['id'], action='request_recieve') }}">Подать заявку на эту книгу</a>
+                {% endif %}
+            {% endif %}
+        </div>
+        <br>
+    </div>
+
+    {% if book_series.__len__() > 0 %}
+        <h3>Книги из серии</h3>
+        {% for cur in book_series %}
+            <div class="row">
+                {% if cur['path_to_cover'] %}
+                    <div class="col-md-auto">
+                        <img src={{ url_for('static', filename=cur['path_to_cover']) }} align=”top” width="180">
+                    </div>
+                {% endif %}
+                <div class="col-md">
+                    <h4><a href="{{ url_for('book_id', id_book=cur['id']) }}">{{ cur['name'] }}</a></h4>
+                    {{ "Оценка: {}".format(cur['rating']) }}<br>
+                    {{ "Год публикации: {}".format(cur['year_of_publication']) }}<br>
+                </div>
+            </div>
+            <hr>
+        {% endfor %}
+    {% endif %}
+</div>
+{% endblock %}

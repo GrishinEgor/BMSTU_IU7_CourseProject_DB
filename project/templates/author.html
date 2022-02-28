@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+
+{% block title %}
+{{ "Автор: {} {}".format(author['name'], author['surname']) }}
+{% endblock %}
+
+{% block body %}
+<div class="container mt-5">
+    <div class="parent">
+        <h1>{{ "Автор: {} {}".format(author['name'], author['surname']) }}</h1>
+    </div>
+
+    <div class="row">
+        <div class="col-md">
+            {{ "Год рождения: {}".format(author['year_birth']) }}<br>
+            {% if author['year_death'] %}
+                {{ "Год смерти: {}".format(author['year_death']) }}<br>
+            {% endif %}
+            {{ "Количество книг автора в библиотеке: {}".format(author['count_books']) }}<br>
+
+            {% if user_role == 'librarian' %}
+                <form action={{ url_for('add_book', id_author=author['id']) }}
+                        method="post" enctype="multipart/form-data">
+                    <h4>Добавление новой книги автора</h4>
+                    Название:<br>
+                    <p><input type="text" name="name" required></p>
+                    Год публикации:<br>
+                    <p><input type="number" name="year_of_publication" required></p>
+                    Количество экземпляров:<br>
+                    <p><input type="number" name="number_of_copies" required></p>
+                    Название предыдущей части (необязательно):<br>
+                    <p><input type="text" name="name_last_part"></p>
+                    Название следующей части (необязательно):<br>
+                    <p><input type="text" name="name_next_part"></p>
+                    Обложка (необязательно):<br>
+                    <p><input type="file" name="cover"></p>
+                    <p><input type="submit" value="Добавить"></p>
+                </form>
+
+                {% for msg in get_flashed_messages() %}
+                    <div class="flash">{{msg}}</div>
+                {% endfor %}
+            {% endif %}
+        </div>
+        <br>
+    </div>
+
+    {% if books.__len__() > 0 %}
+        <h3>Книги автора</h3>
+        {% for book in books %}
+            <div class="row">
+                {% if book['path_to_cover'] %}
+                    <div class="col-md-auto">
+                        <img src={{ url_for('static', filename=book['path_to_cover']) }} align=”top” width="180">
+                    </div>
+                {% endif %}
+                <div class="col-md">
+                    <h4><a href="{{ url_for('book_id', id_book=book['id']) }}">{{ book['name'] }}</a></h4>
+                    {{ "Оценка: {}".format(book['rating']) }}<br>
+                    {{ "Год публикации: {}".format(book['year_of_publication']) }}<br>
+                </div>
+            </div>
+            <hr>
+        {% endfor %}
+    {% endif %}
+</div>
+{% endblock %}

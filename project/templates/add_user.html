@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Регистрация
+{% endblock %}
+
+{% block body %}
+<body class="text-center" cz-shortcut-listen="true">
+    <form class="container align-self-center" action={{ url_for('add_user', role=role) }} method="post">
+        {% if role == 'admin' %}
+            <h1>Регистрация нового администратора</h1>
+            Логин:<br>
+            <p><input type="text" name="login" required></p>
+            Пароль:<br>
+            <p><input type="text" name="password" required></p>
+            <p><input type="submit" value="Зарегистрировать"></p>
+        {% elif role == 'librarian' %}
+            <h1>Регистрация нового библотекаря</h1>
+            Логин:<br>
+            <p><input type="text" name="login" required></p>
+            Пароль:<br>
+            <p><input type="text" name="password" required></p>
+            <p><input type="submit" value="Зарегистрировать"></p>
+        {% elif role == 'reader' %}
+            <h1>Регистрация нового читателя</h1>
+            Логин:<br>
+            <p><input type="text" name="login" required></p>
+            Пароль:<br>
+            <p><input type="text" name="password" required></p>
+            Имя:<br>
+            <p><input type="text" name="name" required></p>
+            Фамилия:<br>
+            <p><input type="text" name="surname" required></p>
+            Дата рождения:<br>
+            <p><input type="date" name="birth_date" required></p>
+            Адрес электронной почты:<br>
+            <p><input type="email" name="email" required></p>
+            Номер телефона:<br>
+            <p><input type="tel" name="phone" required></p>
+            <p><input type="submit" value="Зарегистрировать"></p>
+        {% endif %}
+
+        {% for msg in get_flashed_messages() %}
+            <div class="flash">{{msg}}</div>
+        {% endfor %}
+    </form>
+</body>
+{% endblock %}
